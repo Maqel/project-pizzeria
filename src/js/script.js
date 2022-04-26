@@ -57,7 +57,10 @@
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccordion();
+      thisProduct.initOrderForm();
+      thisProduct.processOrder();
       console.log('new Product:', thisProduct);
     }
     renderInMenu(){
@@ -71,31 +74,77 @@
       /*[DONE]add element to menu*/
       menuContainer.appendChild(thisProduct.element);
     }
+    getElements(){
+      const thisProduct = this;
+      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
+      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
+      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+    }
     initAccordion(){
       const thisProduct = this;
-      /* find the clickable trigger (the element that should react to clicking) */
-      const clickableTrigger = thisProduct.element.querySelector(
-        select.menuProduct.clickable
-      );
-      //console.log('clickableTrigger:', clickableTrigger);
-      /* START: add event listener to clickable trigger on event click */
-      clickableTrigger.addEventListener('click', function(event){
-        /* prevent default action for event */
+      /*[DONE]START: add event listener to clickable trigger on event click*/
+      thisProduct.accordionTrigger.addEventListener('click', function(event){
+        /*[DONE]Prevent default action for event*/
         event.preventDefault();
-        /* find active product (product that has active class) */
+        /*[DONE]Find active product (product that has active class)*/
         const activeProduct = document.querySelector(
           select.all.menuProductsActive
         );
-        //console.log('activeProduct:', activeProduct);
-        /* if there is active product and it's not thisProduct.element, remove class active from it */
+        /*[DONE]If there is active product and it's not thisProduct.element, remove class active from it*/
         if (activeProduct != null && activeProduct != thisProduct.element) {
           activeProduct.classList.remove('active');
-          //console.log('removed!');
         }
-        /* toggle active class on thisProduct.element */
+        /*[DONE]Toggle active class on thisProduct.element*/
         thisProduct.element.classList.toggle('active');
-        console.log('toggled!');
       });
+    }
+    initOrderForm(){
+      const thisProduct = this;
+      thisProduct.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      }); 
+      for(let input of thisProduct.formInputs){
+        input.addEventListener('change', function(){
+          thisProduct.processOrder();
+        });
+      }
+      thisProduct.cartButton.addEventListener('click', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+    }
+    processOrder(){
+      const thisProduct = this;
+      /*[DONE]Covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}*/
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      /*[DONE]Set price to default price*/
+      let price = thisProduct.data.price;
+      /*[DONE]For every category (param)*/
+      for(let paramId in thisProduct.data.params) {
+        /*[DONE]Determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }*/
+        const param = thisProduct.data.params[paramId];
+        /*[DONE]For every option in this category*/
+        for(let optionId in param.options) {
+          /*[DONE]Determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }*/
+          const option = param.options[optionId];
+          /*[DONE]Check if there is param with a name of paramId in formData and if it includes optionId*/
+          const optionSelected = formData[paramId].includes(optionId);
+          /*[DONE]Check if the option is not default*/
+          if (!option.default && optionSelected) {
+            /*[DONE]Add option price to price variable*/
+            price += option.price;
+          } 
+          else if (option.default && !optionSelected) {
+            /*[DONE]Add option price to price variable*/
+            price -= option.price;
+          }
+        } /*[DONE]*END LOOP: For every option in this category*/
+      } /*[DONE]*END LOOP: For every category (param)*/
+      /*[DONE]Update calculated price in the HTML*/
+      thisProduct.priceElem.innerHTML = price;
     }
   }
   const app = {

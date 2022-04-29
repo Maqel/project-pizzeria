@@ -202,7 +202,7 @@
         && !isNaN(newValue) 
         && value >= settings.amountWidget.defaultMin 
         && value <= settings.amountWidget.defaultMax) {
-        thisWidget.announce();     //<---- NIE DZIAŁA................................
+        thisWidget.announce();
         thisWidget.value = newValue; 
       }
       
@@ -224,7 +224,7 @@
     }
     announce(){
       const thisWidget = this;
-      const event = new event('updated' );
+      const event = new CustomEvent('updated' );
       thisWidget.element.dispatchEvent(event);
     }
   }

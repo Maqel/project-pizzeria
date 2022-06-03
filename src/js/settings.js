@@ -44,10 +44,12 @@ export const select = {
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
     floorPlan: '.floor-plan',
+    selectedTable: '.table.selected',
     phone: '.order-confirmation [name="phone"]',
     address: '.order-confirmation [name="address"]',
     submit: '.order-confirmation [type="submit"]',
     startersCheckbox: '.checkbox',
+    form: '.booking-form'
   },
   nav: {
     links: '.main-nav a',
@@ -82,6 +84,7 @@ export const classNames = {
     wrapperActive: 'active',
   },
   booking: {
+    table: 'table',
     loading: 'loading',
     tableBooked: 'booked',
     tableSelected: 'selected',

@@ -2,6 +2,7 @@ import { settings, select, classNames} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
+import Home from './components/Home.js';
 
 const app = {
   initPages: function () {
@@ -30,6 +31,7 @@ const app = {
       });
 
     }
+    thisApp.initHome(); 
   },
   activatePage: function (pageId){
     const thisApp = this;
@@ -85,6 +87,14 @@ const app = {
     thisApp.booking = new Booking(thisApp.bookingWidget);
   },
 
+  initHome: function(){
+    const thisApp = this;
+    /* find container of home page */
+    thisApp.homePage = document.querySelector(select.containerOf.home);
+    /* create new instance of class Home and pass home container to it */
+    new Home(thisApp.homePage);
+  },
+
   init: function(){
     const thisApp = this;
     //console.log('*** App starting ***');
@@ -96,6 +106,7 @@ const app = {
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
+    //thisApp.initHome(); 
   },
   
 };

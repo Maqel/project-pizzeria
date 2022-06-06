@@ -1,2 +1,2 @@
-version 2.4
- https://git.heroku.com/maq-pizza.git
+Project-Pizzeria
+ https://morning-eyrie-88391.herokuapp.com/

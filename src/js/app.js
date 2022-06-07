@@ -8,7 +8,7 @@ const app = {
   initPages: function () {
     const thisApp = this;
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
-    thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    thisApp.pageLinks = document.querySelectorAll('.main-nav a, a.pageLink');
     const idFromHash = window.location.hash.replace('#/', '');
     let pageMatchingHash = thisApp.pages[0].id;
     for(let page of thisApp.pages) {
@@ -18,7 +18,7 @@ const app = {
       }
     }
     thisApp.activatePage(pageMatchingHash);
-    for(let link of thisApp.navLinks){
+    for(let link of thisApp.pageLinks){
       link.addEventListener('click', function(event){
         const clickedElement = this;
         event.preventDefault();
@@ -40,7 +40,7 @@ const app = {
       page.classList.toggle(classNames.pages.active, page.id == pageId);
     }
     /*Add class active to matching links, remove from non-matching*/
-    for(let link of thisApp.navLinks){
+    for(let link of thisApp.pageLinks){
       link.classList.toggle(
         classNames.nav.active,
         link.getAttribute('href') == '#' + pageId
